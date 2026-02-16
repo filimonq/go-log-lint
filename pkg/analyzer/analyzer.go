@@ -13,18 +13,13 @@ var Analyzer = &analysis.Analyzer{
 	Run:  run,
 }
 
-// run — это функция запуска, которую дергает фреймворк.
-func run(pass *analysis.Pass) (interface{}, error) {
-	// 1. Инициализируем слой приложения (Application)
+func run(pass *analysis.Pass) (any, error) {
 	linterApp := application.NewLinter()
 
-	// 2. Получаем активные правила (Domain)
 	activeRules := linterApp.EnabledRules()
 
-	// 3. Создаем Инспектора (Infrastructure), скармливаем ему правила
 	visitor := ast_visitor.NewLogVisitor(pass, activeRules)
 
-	// 4. Запускаем обход
 	visitor.Walk()
 
 	return nil, nil

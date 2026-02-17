@@ -87,6 +87,6 @@ rules:
 ```
 
 2. Запустите линтер с флагом -config:
-Bash
-
+```bash
 ./gologlint -config config.yaml ./...
+```

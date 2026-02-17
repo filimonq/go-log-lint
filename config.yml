@@ -1,0 +1,15 @@
+rules:
+  LowercaseRule:
+    enabled: false
+  SensitiveDataRule:
+    enabled: true
+    patterns:
+      - password
+      - secret
+      - api_key
+      - token
+      - credential
+  EnglishOnlyRule:
+    enabled: true
+  SpecialCharsRule:
+    enabled: true

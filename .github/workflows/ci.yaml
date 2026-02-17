@@ -1,0 +1,34 @@
+name: Go Log Lint CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.25
+          cache: true
+
+      - name: Get dependencies
+        run: go mod download
+
+      - name: Run Unit & Integration Tests
+        run: go test -v -race ./...
+      
+      - name: Build Standalone Binary
+        run: go build -v -o gologlint cmd/go-log-lint/main.go
+
+      - name: Build Plugin (Check compatibility)
+        run: go build -v -buildmode=plugin -o gologlint.so plugin/main.go

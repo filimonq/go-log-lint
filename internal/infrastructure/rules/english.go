@@ -13,7 +13,7 @@ func NewEnglishRule() *EnglishRule {
 }
 
 func (r *EnglishRule) Name() string {
-	return "EnglishRule"
+	return "EnglishOnlyRule"
 }
 
 func (r *EnglishRule) Check(entry domain.LogEntry) []domain.Issue {

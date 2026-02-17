@@ -79,7 +79,7 @@ func TestSpecialCharsRule(t *testing.T) {
 }
 
 func TestSensitiveDataRule(t *testing.T) {
-	rule := NewSensitiveDataRule()
+	rule := NewSensitiveDataRule(nil)
 
 	tests := []struct {
 		name    string

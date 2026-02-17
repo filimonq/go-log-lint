@@ -1,11 +1,16 @@
 # go-log-lint
 
-Линтер для проверки стиля логов в Go (slog, zap).
+Линтер для проверки стиля логов в Go.
+
+## 📦 Поддерживаемые логгеры
+Линтер автоматически определяет и проверяет вызовы из следующих библиотек:
+* **Standard Library:** `log/slog`
+* **Uber Zap:** `go.uber.org/zap`
 
 ## ✅ Что проверяем (Rules)
 1. **LowercaseRule** — Сообщение с маленькой буквы.
 2. **NoSpecialCharsRule** — Нет знаков `!` `?`.
-3. **SensitiveDataRule** — Нет паролей и токенов.
+3. **SensitiveDataRule** — Нет паролей, токенов и т.д.
 4. **EnglishOnlyRule** — Только английский язык.
 
 ## 🔨 Сборка
@@ -27,7 +32,7 @@ go build -buildmode=plugin -o gologlint.so plugin/main.go
 ./gologlint ./demo/...
 ```
 
-С авто-исправлением (на данный момент фиксит lowercase ошибку):
+С авто-исправлением (на данный момент фиксит 2 ошибки):
 ```bash
 ./gologlint -fix ./demo/...
 ```
@@ -51,7 +56,37 @@ linters:
 golangci-lint run
 ```
 
-С авто-исправлением (на данный момент фиксит lowercase ошибку):
+С авто-исправлением (на данный момент фиксит 2 ошибки):
 ```bash
 golangci-lint run --fix
 ```
+
+## ⚙️ Конфигурация
+
+По умолчанию включены все правила. Вы можете отключить ненужные или добавить свои паттерны для поиска секретов через YAML-файл.
+
+**1. Создайте файл `config.yaml`:**
+
+```yaml
+rules:
+  SpecialCharsRule:
+    enabled: false
+
+  SensitiveDataRule:
+    enabled: true
+    patterns:
+      - "(?i)my_secret_key"
+      - secret
+      - api_key
+      - token
+
+  LowercaseRule:
+    enabled: true
+  EnglishOnlyRule:
+    enabled: true
+```
+
+2. Запустите линтер с флагом -config:
+Bash
+
+./gologlint -config config.yaml ./...

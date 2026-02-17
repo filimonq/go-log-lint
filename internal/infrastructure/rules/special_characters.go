@@ -19,9 +19,14 @@ func (r *SpecialCharsRule) Name() string {
 func (r *SpecialCharsRule) Check(entry domain.LogEntry) []domain.Issue {
 	// emojis and other non-ASCII characters are handled by EnglishRule
 	if strings.ContainsAny(entry.Message, "!?") {
+		fixedMsg := strings.ReplaceAll(entry.Message, "!", "")
+		fixedMsg = strings.ReplaceAll(fixedMsg, "?", "")
+		fixedMsg = strings.TrimSpace(fixedMsg)
+
 		return []domain.Issue{{
-			Pos:     entry.Pos,
-			Message: "message should not contain '!' or '?' characters",
+			Pos:         entry.Pos,
+			Message:     "message should not contain '!' or '?' characters",
+			Replacement: fixedMsg,
 		}}
 	}
 	return nil

@@ -4,8 +4,11 @@ rules:
   SensitiveDataRule:
     enabled: true
     patterns:
-      - "key-[0-9]+"
-      - "internal-id: .+"
+      - password
+      - secret
+      - api_key
+      - token
+      - credential
   EnglishOnlyRule:
     enabled: true
   SpecialCharsRule:

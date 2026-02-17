@@ -7,9 +7,11 @@ type LogEntry struct {
 	Package  string    // Package is the name of the package where the log entry is located
 	Function string    // Info, Error, Debug, etc.
 	Pos      token.Pos // Position in the source code where the log entry is located
+	ArgLen   int       // Number of arguments passed to the log function
 }
 
 type Issue struct {
-	Message string    // Description of the issue
-	Pos     token.Pos // Position in the source code where the issue is located
+	Message     string    // Description of the issue
+	Pos         token.Pos // Position in the source code where the issue is located
+	Replacement string    // Optional: Suggested replacement for the log message
 }

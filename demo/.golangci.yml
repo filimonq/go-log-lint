@@ -1,0 +1,11 @@
+linters-settings:
+  custom:
+    gologlint:
+      path: ../gologlint.so
+      description: checks log messages style
+      original-url: github.com/filimonq/go-log-lint
+
+linters:
+  disable-all: true
+  enable:
+    - gologlint

@@ -25,9 +25,13 @@ func (r *LowercaseRule) Check(entry domain.LogEntry) []domain.Issue {
 	firstRune, _ := utf8.DecodeRuneInString(entry.Message)
 
 	if unicode.IsLetter(firstRune) && unicode.IsUpper(firstRune) {
+		runes := []rune(entry.Message)
+		fixedMsg := string(unicode.ToLower(runes[0])) + string(runes[1:])
+
 		return []domain.Issue{{
-			Pos:     entry.Pos,
-			Message: fmt.Sprintf("message should start with lowercase letter: '%c'", firstRune),
+			Pos:         entry.Pos,
+			Message:     fmt.Sprintf("message should start with lowercase letter: '%c'", firstRune),
+			Replacement: fixedMsg,
 		}}
 	}
 	return nil

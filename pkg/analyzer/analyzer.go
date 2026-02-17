@@ -21,8 +21,10 @@ func init() {
 }
 
 func run(pass *analysis.Pass) (any, error) {
-	cfg, _ := config.Load(configPath)
-
+	cfg, err := config.Load(configPath)
+	if err != nil {
+		return nil, err
+	}
 	linterApp := application.NewLinter(cfg)
 
 	activeRules := linterApp.EnabledRules()

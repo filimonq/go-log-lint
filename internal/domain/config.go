@@ -12,10 +12,10 @@ type RuleConfig struct {
 func DefaultConfig() *Config {
 	return &Config{
 		Rules: map[string]RuleConfig{
-			"LowercaseRule":      {Enabled: true},
-			"NoSpecialCharsRule": {Enabled: true},
-			"SensitiveDataRule":  {Enabled: true},
-			"EnglishOnlyRule":    {Enabled: true},
+			"LowercaseRule":     {Enabled: true},
+			"SpecialCharsRule":  {Enabled: true},
+			"SensitiveDataRule": {Enabled: true},
+			"EnglishOnlyRule":   {Enabled: true},
 		},
 	}
 }

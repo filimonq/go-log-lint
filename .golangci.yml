@@ -1,0 +1,12 @@
+rules:
+  LowercaseRule:
+    enabled: false
+  SensitiveDataRule:
+    enabled: true
+    patterns:
+      - "key-[0-9]+"
+      - "internal-id: .+"
+  EnglishOnlyRule:
+    enabled: true
+  SpecialCharsRule:
+    enabled: true

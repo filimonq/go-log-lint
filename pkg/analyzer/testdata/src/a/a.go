@@ -14,7 +14,7 @@ func checkLogs() {
 	slog.Debug("user password is 123") // want `\[SensitiveDataRule\] message contains potential sensitive data: match pattern 'password'`
 
 	// 4. Ошибка: русский текст
-	slog.Error("ошибка") // want `\[EnglishRule\] message should contain only English \(ASCII\) characters`
+	slog.Error("ошибка") // want `\[EnglishOnlyRule\] message should contain only English \(ASCII\) characters`
 
 	// 5. Правильный лог — тут линтер должен молчать
 	slog.Info("all systems nominal")

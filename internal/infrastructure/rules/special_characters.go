@@ -13,7 +13,7 @@ func NewSpecialCharsRule() *SpecialCharsRule {
 }
 
 func (r *SpecialCharsRule) Name() string {
-	return "no_special_chars"
+	return "SpecialCharsRule"
 }
 
 func (r *SpecialCharsRule) Check(entry domain.LogEntry) []domain.Issue {

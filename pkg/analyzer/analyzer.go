@@ -5,7 +5,10 @@ import (
 
 	"github.com/filimonq/go-log-lint/internal/application"
 	ast_visitor "github.com/filimonq/go-log-lint/internal/infrastructure/ast"
+	"github.com/filimonq/go-log-lint/internal/infrastructure/config"
 )
+
+var configPath string
 
 var Analyzer = &analysis.Analyzer{
 	Name: "gologlint",
@@ -13,8 +16,14 @@ var Analyzer = &analysis.Analyzer{
 	Run:  run,
 }
 
+func init() {
+	Analyzer.Flags.StringVar(&configPath, "config", ".gologlint.yaml", "path to configuration file")
+}
+
 func run(pass *analysis.Pass) (any, error) {
-	linterApp := application.NewLinter()
+	cfg, _ := config.Load(configPath)
+
+	linterApp := application.NewLinter(cfg)
 
 	activeRules := linterApp.EnabledRules()
 

@@ -52,14 +52,13 @@ func (v *LogVisitor) inspectNode(node ast.Node) bool {
 		return true
 	}
 
-	msg, rawLen, pos, ok := v.extractMessageArg(callExpr.Args)
+	msg, pos, ok := v.extractMessageArg(callExpr.Args)
 	if !ok {
 		return true
 	}
 
 	entry := domain.LogEntry{
 		Message:  msg,
-		ArgLen:   rawLen,
 		Function: funcName,
 		Pos:      pos,
 	}
@@ -101,24 +100,24 @@ func (v *LogVisitor) extractFunctionName(expr ast.Expr) (string, bool) {
 	return "", false
 }
 
-func (v *LogVisitor) extractMessageArg(args []ast.Expr) (string, int, token.Pos, bool) {
+func (v *LogVisitor) extractMessageArg(args []ast.Expr) (string, token.Pos, bool) {
 	if len(args) == 0 {
-		return "", 0, 0, false
+		return "", 0, false
 	}
 
 	arg := args[0]
 
 	lit, ok := arg.(*ast.BasicLit)
 	if !ok || lit.Kind != token.STRING {
-		return "", 0, 0, false
+		return "", 0, false
 	}
 
 	val, err := strconv.Unquote(lit.Value)
 	if err != nil {
-		return "", 0, 0, false
+		return "", 0, false
 	}
 
-	return val, len(lit.Value), lit.Pos(), true
+	return val, lit.Pos(), true
 }
 
 func (v *LogVisitor) isLogFunction(name string) bool {
@@ -138,31 +137,7 @@ func (v *LogVisitor) applyRules(entry domain.LogEntry) {
 	for _, rule := range v.rules {
 		issues := rule.Check(entry)
 		for _, issue := range issues {
-
-			diag := analysis.Diagnostic{
-				Pos:      issue.Pos,
-				Message:  "[" + rule.Name() + "] " + issue.Message,
-				Category: rule.Name(),
-			}
-
-			if issue.Replacement != "" {
-				newText := strconv.Quote(issue.Replacement)
-
-				diag.SuggestedFixes = []analysis.SuggestedFix{
-					{
-						Message: "Fix to lowercase",
-						TextEdits: []analysis.TextEdit{
-							{
-								Pos:     issue.Pos,
-								End:     issue.Pos + token.Pos(entry.ArgLen),
-								NewText: []byte(newText),
-							},
-						},
-					},
-				}
-			}
-
-			v.pass.Report(diag)
+			v.pass.Reportf(issue.Pos, "[%s] %s", rule.Name(), issue.Message)
 		}
 	}
 }
